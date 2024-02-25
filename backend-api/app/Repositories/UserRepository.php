@@ -20,9 +20,11 @@ class UserRepository extends BaseRepository
                 'email' => data_get($attributes, 'email'),
             ]);
 
-            if(!$created) {
-                throw new \Exception('Failed to create user');
-            }
+            // if(!$created) {
+            //     throw new \Exception('Failed to create user');
+            // }
+
+            throw_if(!$created, GeneralJsonException::class, 'Failed to create user');
 
             return $created;
         });
@@ -41,9 +43,11 @@ class UserRepository extends BaseRepository
                 'email' => data_get($attributes, 'email', $user->email),
             ]);
 
-            if(!$updated) {
-                throw new \Exception('Failed to update user');
-            }
+            // if(!$updated) {
+            //     throw new \Exception('Failed to update user');
+            // }
+
+            throw_if(!$updated, GeneralJsonException::class, 'Failed to update user');
 
             return $user;
 
@@ -59,9 +63,11 @@ class UserRepository extends BaseRepository
         return DB::transaction(function () use($user) {
             $deleted = $user->forceDelete();
 
-            if(!$deleted) {
-                throw new \Exception('Cannot delete user');
-            }
+            // if(!$deleted) {
+            //     throw new \Exception('Cannot delete user');
+            // }
+
+            throw_if(!$deleted, GeneralJsonException::class, 'Failed to delete user');
 
             return $deleted;
         });

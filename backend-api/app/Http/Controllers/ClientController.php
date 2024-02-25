@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\GeneralJsonException;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Repositories\ClientRepository;
@@ -17,6 +18,7 @@ class ClientController extends Controller
      * @return ResourceCollection
      */
     public function index(Request $request) {
+        // throw new GeneralJsonException('some erorrrrr', 422);
         $clients = Client::query()->paginate($request->page_size ?? 10);
 
         return ClientResource::collection($clients);
