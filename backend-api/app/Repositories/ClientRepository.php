@@ -17,7 +17,6 @@ class ClientRepository extends BaseRepository{
                 'gender' => data_get($attributes, 'gender'),
                 'marital_status' => data_get($attributes, 'marital_status'),
                 'date_of_birth' => data_get($attributes, 'date_of_birth'),
-                'approval_status' => data_get($attributes, 'approval_status'),
             ]);
 
             // if(!$created) {
@@ -42,11 +41,10 @@ class ClientRepository extends BaseRepository{
     {
         return DB::transaction(function () use($client, $attributes) {
             $updated = $client->update([
-                'name' => data_get($attributes, 'name'),
-                'gender' => data_get($attributes, 'gender'),
-                'marital_status' => data_get($attributes, 'marital_status'),
-                'date_of_birth' => data_get($attributes, 'date_of_birth'),
-                'approval_status' => data_get($attributes, 'approval_status'),
+                'name' => data_get($attributes, 'name', $client->name),
+                'gender' => data_get($attributes, 'gender', $client->gender),
+                'marital_status' => data_get($attributes, 'marital_status', $client->marital_status),
+                'date_of_birth' => data_get($attributes, 'date_of_birth', $client->date_of_birth),
             ]);
 
             // if(!$updated) {

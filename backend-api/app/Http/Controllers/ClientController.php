@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\GeneralJsonException;
+use App\Http\Requests\ClientStoreRequest;
+use App\Http\Requests\ClientUpdateRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Repositories\ClientRepository;
@@ -18,7 +19,6 @@ class ClientController extends Controller
      * @return ResourceCollection
      */
     public function index(Request $request) {
-        // throw new GeneralJsonException('some erorrrrr', 422);
         $clients = Client::query()->paginate($request->page_size ?? 10);
 
         return ClientResource::collection($clients);
@@ -28,16 +28,15 @@ class ClientController extends Controller
     /**
      * Store a newly created resoource in storage
      *
-     * @param \Illuminate\Http\Request
+     * @param ClientStoreRequest $request
      * @return ClientResource
      */
-    public function store(Request $request, ClientRepository $clientRepository) {
+    public function store(ClientStoreRequest $request, ClientRepository $clientRepository) {
         $created = $clientRepository->create($request->only([
             'name',
             'gender',
             'marital_status',
             'date_of_birth',
-            'approval_status' // ! This should be removed
         ]));
 
         return new ClientResource($created);
@@ -56,18 +55,17 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage
      *
-     * @param \Illuminate\Http\Request $request
+     * @param ClientUpdateRequest $request
      * @param \App\Models\Client $client
      * @return ClientResource | JsonResponse
      */
-    public function update(Request $request, Client $client, ClientRepository $clientRepository) {
+    public function update(ClientUpdateRequest $request, Client $client, ClientRepository $clientRepository) {
 
         $client = $clientRepository->update($client, $request->only([
             'name',
             'gender',
             'marital_status',
             'date_of_birth',
-            'approval_status' // ! This should be removed
         ]));
 
         return new ClientResource($client);
