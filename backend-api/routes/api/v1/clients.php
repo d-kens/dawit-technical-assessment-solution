@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::middleware([
-//    'auth:api',
+   'auth:sanctum',
 ])
     ->name('clients.')
     ->namespace("\App\Http\Controllers")
