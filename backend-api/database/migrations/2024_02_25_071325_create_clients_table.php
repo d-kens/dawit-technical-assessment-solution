@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female']);
             $table->enum('marital_status', ['single', 'married']);
             $table->date('date_of_birth');
-            $table->boolean('approval_status')->default(false); 
+            $table->boolean('approval_status')->default(false);
             $table->timestamps();
         });
     }

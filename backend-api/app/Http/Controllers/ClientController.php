@@ -45,10 +45,9 @@ class ClientController extends Controller
     /**
      * Display the specified resource
      * @param \App\Models\Client
-     * @return ClientResource
+     * @return ClientResource | JsonResponse
      */
     public function show(Client $client) {
-
         return new ClientResource($client);
     }
 
@@ -82,6 +81,22 @@ class ClientController extends Controller
         return new JsonResponse([
             'data' => 'success'
         ]);
+    }
+
+    /**
+     * Toggle the approval status of the specified resource.
+     *
+     * @param \App\Models\Client $client
+     * @return ClientResource
+     */
+    public function approve(Client $client) {
+        $newApprovalStatus = !$client->approval_status;
+
+        $client->update([
+            'approval_status' => $newApprovalStatus
+        ]);
+
+        return new ClientResource($client);
     }
 
 

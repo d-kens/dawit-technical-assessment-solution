@@ -18,6 +18,6 @@ Route::middleware([
 
         Route::delete('clients/{client}', [\App\Http\Controllers\ClientController::class, 'destroy'])->name('destroy');
 
-        Route::post('clients/{client}/approve', [\App\Http\Controllers\ClientController::class, 'share'])->name('approve');
+        Route::patch('clients/{client}/approve', [\App\Http\Controllers\ClientController::class, 'approve'])->name('approve');
 
     });
