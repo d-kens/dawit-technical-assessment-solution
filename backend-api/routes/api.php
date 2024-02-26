@@ -17,8 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
-    // Recursively load the routes
-    
+    // Recursively load the resource routes files
     \App\Helpers\Routes\RouteHelper::includeRouteFiles(__DIR__ . '/api/v1');
 
 });
