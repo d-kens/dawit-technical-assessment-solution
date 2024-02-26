@@ -2,10 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware([
-   'auth:sanctum',
-])->group(function () {
-
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('clients', [\App\Http\Controllers\ClientController::class, 'index']);
 
     Route::get('clients/{client}', [\App\Http\Controllers\ClientController::class, 'show'])->whereNumber('client');
