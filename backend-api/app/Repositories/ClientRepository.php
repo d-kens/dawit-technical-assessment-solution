@@ -47,10 +47,6 @@ class ClientRepository extends BaseRepository{
                 'date_of_birth' => data_get($attributes, 'date_of_birth', $client->date_of_birth),
             ]);
 
-            // if(!$updated) {
-            //     throw new \Exception('Failed to update client');
-            // }
-
             throw_if(!$updated, GeneralJsonException::class, 'Failed to update client');
 
             return $client;
@@ -66,9 +62,6 @@ class ClientRepository extends BaseRepository{
         return DB::transaction(function () use($client) {
             $deleted = $client->forceDelete();
 
-            // if(!$deleted) {
-            //     throw new \Exception('Cannot delete client');
-            // }
 
             throw_if(!$deleted, GeneralJsonException::class, 'Failed to delete client');
 
