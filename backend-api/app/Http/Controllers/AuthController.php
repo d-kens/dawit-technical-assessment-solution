@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -35,12 +34,13 @@ class AuthController extends Controller
 
 
         // Return success response with status code 201
-        return new JsonResponse(['user' => $user], Response::HTTP_CREATED);
+        return new JsonResponse([
+            'user' => $user,
+            'token' => $user->createToken('API Token of ' . $user->name)->plainTextToken
+        ], Response::HTTP_CREATED);
     }
 
-
     public function login(Request $request) {
-        // validation
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|string',
@@ -50,38 +50,29 @@ class AuthController extends Controller
             return new JsonResponse(['errors' => $validator->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response([
                 'message'=> 'Invalid Credentials'
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        // authentication attempt
-        // unsuccessful authentication
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return new JsonResponse(['message' => 'Invalid Credentials'], Response::HTTP_UNAUTHORIZED);
-        }
 
-        // unsuccessful authentication
-        $user = Auth::user();
+        $user = User::where('email', $request->email)->first();
 
-        $token = $user->createToken('token')->plainTextToken;
+        return new JsonResponse([
+            'user' => $user,
+            'token' => $user->createToken('API Token of ' . $user->name)->plainTextToken
+        ], Response::HTTP_OK);
 
-        $cookie = cookie('jwt', $token, 60 * 24); // jwt cookie
-
-        // create a response with success message
-        $response = new JsonResponse(['message' => 'success'], Response::HTTP_OK);
-
-        // attach the jwt cookie to the response
-        return $response->withCookie($cookie);
     }
 
-    public function logout(Request $request) {
-        // set the jwt cookie to null (remove cokkie) and with a negative expiration time
-        $cookie = cookie('jwt', null, -1);
 
-        $response = new JsonResponse(['message' => 'success'], Response::HTTP_OK);
+    public function logout() {
+        Auth::user()->currentAccessToken()->delete();
 
-        return $response->withCookie($cookie);
+        return new JsonResponse([
+            'message' => 'you have successfuly been logged out'
+        ], Response::HTTP_OK);
     }
 }

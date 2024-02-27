@@ -6,8 +6,9 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Http\Resources\ClientResource;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\ClientRepository;
+use App\Http\Resources\ClientResource;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -124,6 +125,5 @@ class ClientController extends Controller
 
         return (new ClientResource($client))->response()->setStatusCode(Response::HTTP_OK);
     }
-
 
 }
