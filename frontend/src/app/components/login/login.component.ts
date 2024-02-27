@@ -1,35 +1,57 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse  } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, HttpClientModule],
+  imports: [FormsModule, HttpClientModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  form: FormGroup;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private http: HttpClient,
-    private router: Router
-  ){
-    this.form = this.formBuilder.group({
-      email: '',
-      password: ''
-    })
+  loginObj: Login;
+
+  constructor(private http: HttpClient,private router: Router) {
+    this.loginObj = new Login();
   }
 
-  onSubmit(): void {
-    this.http.post('http://127.0.0.1:8000/api/v1/login', this.form.getRawValue(), {withCredentials: true})
-      .subscribe(res => {
-        this.router.navigate(['/'])
-      });
-  }
+  onLogin() {
+    console.log(this.loginObj);
+
+    this.http.post('http://127.0.0.1:8000/api/v1/login', this.loginObj)
+      .subscribe(
+        (res: any) => {
+          console.log(res.user);
+          console.log(res.token);
+
+          if (res.user) {
+            alert('Login successful');
+            localStorage.setItem('auth-token', res.token);
+            this.router.navigateByUrl('/clients');
+          }
+        },
+        (error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            alert('Unauthorized: Please check your credentials');
+          } else {
+            console.error('Error occurred:', error);
+          }
+        }
+      );
+}
+}
 
 
+
+export class Login {
+    email: string;
+    password: string;
+    constructor() {
+      this.email = '';
+      this.password = '';
+    }
 }
