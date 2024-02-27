@@ -1,3 +1,6 @@
+
+
+
 # Recruitment Assignment
 
 ## Backend (Laravel) Assignment
@@ -77,6 +80,20 @@ Build a Frontend Application using Angular to consume the created Laravel API.
 
 ### Implementation Details
 
-1. **Components**
+### Implementation Details
+
+1. Components
    - Register and Login components: Register and Authenticate a user for them to be able to interact with the CRUD for client resource.
-   - Clients: After a user is successfully authenticated, they are navigated to the Clients component which fetches a list of resources from the server and displays them in a table. Clients' approval status can be toggled (Approve/Withdraw approval) based on client approval status.
+   - Clients: After a user is successfully authenticated, they are navigated to the Clients component which fetches a list of resources from the server and displays them in a table. Client approval status can be toggled (Approve/Withdraw approval) based on client approval status.
+   - Utilized interceptors to intercept the requests being sent to the server after successful authentication. The interceptor adds the authorization header using the auth token received after authentication to requests.
+
+## Other 
+- HTML: For markup.
+- CSS: For styling.
+
+
+
+
+
+
+
